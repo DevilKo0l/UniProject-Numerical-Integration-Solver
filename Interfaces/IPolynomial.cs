@@ -8,10 +8,7 @@ namespace Numerical_Integration_Solver
 {
     interface IPolynomial
     {
-        List<int> polynomialCoefficients { get; set; }        
-        int exp { get; set; }
+        List<int> polynomialCoefficients { get; set; }   
         void DisplayFunction();
-
-
     }
 }

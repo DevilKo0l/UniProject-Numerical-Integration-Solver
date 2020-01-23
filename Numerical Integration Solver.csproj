@@ -43,10 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICalculateIntegral.cs" />
-    <Compile Include="IIntegrationMethod.cs" />
+    <Compile Include="Interfaces\ICalculateIntegral.cs" />
+    <Compile Include="Interfaces\IIntegrationMethod.cs" />
     <Compile Include="IntegralsOfPolynomials.cs" />
-    <Compile Include="IPolynomial.cs" />
+    <Compile Include="Interfaces\IPolynomial.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

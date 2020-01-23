@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 namespace Numerical_Integration_Solver
 {
     interface IIntegrationMethod
-    {
-        int[] boundaries { get; set; }
-        int TrapezodalMethod();
-        int SimpsonMethod();
+    {        
+        double TrapezodalMethod(int[] boundaries,double n);
+        double SimpsonMethod(int[] boundaries, double n);
     }
 }
