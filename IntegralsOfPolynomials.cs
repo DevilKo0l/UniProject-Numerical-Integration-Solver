@@ -3,34 +3,33 @@ using System.Collections.Generic;
 
 namespace Numerical_Integration_Solver
 {
-    class IntegralsOfPolynomials : ICalculateIntegral    {
-        
-        public List<int> polynomialCoefficients { get; set; }
+    class IntegralsOfPolynomials : ICalculateIntegral
+    {
 
-        private int exponent;
+        public List<int> polynomialCoefficients { get; set; }
 
         private int sizeFunc;
 
         public IntegralsOfPolynomials(List<int> newPolynomialCoeffients)
         {
             polynomialCoefficients = newPolynomialCoeffients;
-            exponent = polynomialCoefficients.Count - 1;
             sizeFunc = polynomialCoefficients.Count;
         }
-        
+
         public void DisplayFunction()
         {
-            Console.WriteLine("The function you'have enterd: ");            
-            
+            int exponent = polynomialCoefficients.Count - 1;
+            Console.WriteLine("The function you'have enterd: ");
+
             string polyFunction = $"f(x) = {polynomialCoefficients[0]}x^{exponent}";
             exponent--;
-            for (int i = 1; i <sizeFunc-1; i++)
+            for (int i = 1; i < sizeFunc - 1; i++)
             {
                 int coeff = polynomialCoefficients[i];
                 _ = (coeff > 0) ?
                     polyFunction += $" + {coeff}x^{exponent}" :
-                    polyFunction += $" - {Math.Abs(coeff)}x^{exponent}";                  
-                
+                    polyFunction += $" - {Math.Abs(coeff)}x^{exponent}";
+
                 exponent--;
             }
             int constPoly = polynomialCoefficients[sizeFunc - 1];
@@ -39,23 +38,9 @@ namespace Numerical_Integration_Solver
             polyFunction += $" - {Math.Abs(constPoly)}";
             Console.WriteLine(polyFunction);
         }
-
-        public double SimpsonMethod(int[] boundaries, double n)
+        private double GetFunctionValue(double n)
         {
-            double h = (boundaries[1] - boundaries[0]) / n;
-            double I = h / 2 * (getFunctionValue(boundaries[0])+ getFunctionValue(boundaries[1]));
-            for (int i = 0; i < n; i++)
-            {
-                int coefficient = (i / 2 == 0) ? 2 : 4;
-                I += coefficient * getFunctionValue(boundaries[0] + i * h);
-            }
-            return I;
-
-        }
-
-        private double getFunctionValue(double n)
-        {
-            exponent = polynomialCoefficients.Count - 1;
+            int exponent = polynomialCoefficients.Count - 1;
             double result = 0;
             for (int i = 0; i < sizeFunc; i++)
             {
@@ -64,16 +49,29 @@ namespace Numerical_Integration_Solver
             }
             return result;
         }
-        public double TrapezodalMethod(int[] boundaries,double n)
+        public double SimpsonMethod(double[] boundaries, int numberOfInterval)
         {
-            double h = (boundaries[1] - boundaries[0]) / n;
-            double I = h / 2 * (getFunctionValue(boundaries[0]) + getFunctionValue(boundaries[1]));
-
-            for (int i = 0; i < n; i++)
+            double h = (boundaries[1] - boundaries[0]) / numberOfInterval;
+            double I =  GetFunctionValue(boundaries[0]) + GetFunctionValue(boundaries[1]);
+            for (int i = 1; i < numberOfInterval; i++)
             {
-                I += h * getFunctionValue(boundaries[0] + i * h);
+                int coefficient = (i % 2 == 0) ? 2 : 4;
+                I += coefficient * GetFunctionValue(boundaries[0] + i * h);
             }
-            return I;
+            return (h*I)/3;
+
+        }
+        
+        public double TrapezodalMethod(double[] boundaries, int numberOfInterval)
+        {
+            double h = (boundaries[1] - boundaries[0]) / numberOfInterval;
+            double I =  GetFunctionValue(boundaries[0]) + GetFunctionValue(boundaries[1]);
+
+            for (int i = 1; i <numberOfInterval-1; i++)
+            {
+                I += 2*GetFunctionValue(boundaries[0] + i * h);
+            }
+            return (h*I)/2;
         }
     }
 }

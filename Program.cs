@@ -12,12 +12,12 @@ namespace Numerical_Integration_Solver
         {
 
             List<int> coeeficient = new List<int>() { 1, 2, 3, -4 };
-            int[] boundaries = new int[2] { 0, 3 };
+            double[] boundaries = new double[2] { 0, 3 };
             ICalculateIntegral form = new  IntegralsOfPolynomials(coeeficient);
             form.DisplayFunction();
             
             Console.WriteLine(form.TrapezodalMethod(boundaries,2));
-            Console.WriteLine(form.TrapezodalMethod(boundaries,2));
+            Console.WriteLine(form.SimpsonMethod(boundaries,2));
 
         }
     }
