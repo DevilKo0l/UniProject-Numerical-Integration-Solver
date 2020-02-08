@@ -7,15 +7,20 @@ namespace Numerical_Integration_Solver
     {
 
         public List<int> polynomialCoefficients { get; set; }
-
+        double[] _boundaries;
         private int sizeFunc;
 
-        public IntegralsOfPolynomials(List<int> newPolynomialCoeffients)
+        public IntegralsOfPolynomials(List<int> newPolynomialCoeffients, double[] boundaries)
         {
             polynomialCoefficients = newPolynomialCoeffients;
             sizeFunc = polynomialCoefficients.Count;
+            _boundaries = boundaries;
         }
 
+        public IntegralsOfPolynomials(double[] boundaries)
+        {
+            _boundaries = boundaries;
+        }
         public void DisplayFunction()
         {
             int exponent = polynomialCoefficients.Count - 1;
@@ -49,27 +54,27 @@ namespace Numerical_Integration_Solver
             }
             return result;
         }
-        public double SimpsonMethod(double[] boundaries, int numberOfInterval)
+        public double SimpsonMethod(int numberOfInterval)
         {
-            double h = (boundaries[1] - boundaries[0]) / numberOfInterval;
-            double I =  GetFunctionValue(boundaries[0]) + GetFunctionValue(boundaries[1]);
+            double h = (_boundaries[1] - _boundaries[0]) / numberOfInterval;
+            double I =  GetFunctionValue(_boundaries[0]) + GetFunctionValue(_boundaries[1]);
             for (int i = 1; i < numberOfInterval; i++)
             {
                 int coefficient = (i % 2 == 0) ? 2 : 4;
-                I += coefficient * GetFunctionValue(boundaries[0] + i * h);
+                I += coefficient * GetFunctionValue(_boundaries[0] + i * h);
             }
             return (h*I)/3;
 
         }
         
-        public double TrapezodalMethod(double[] boundaries, int numberOfInterval)
+        public double TrapezodalMethod(int numberOfInterval)
         {
-            double h = (boundaries[1] - boundaries[0]) / numberOfInterval;
-            double I =  GetFunctionValue(boundaries[0]) + GetFunctionValue(boundaries[1]);
+            double h = (_boundaries[1] - _boundaries[0]) / numberOfInterval;
+            double I =  GetFunctionValue(_boundaries[0]) + GetFunctionValue(_boundaries[1]);
 
             for (int i = 1; i <numberOfInterval-1; i++)
             {
-                I += 2*GetFunctionValue(boundaries[0] + i * h);
+                I += 2*GetFunctionValue(_boundaries[0] + i * h);
             }
             return (h*I)/2;
         }

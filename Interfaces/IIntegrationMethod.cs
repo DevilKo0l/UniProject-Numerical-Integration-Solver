@@ -8,7 +8,7 @@ namespace Numerical_Integration_Solver
 {
     interface IIntegrationMethod
     {        
-        double TrapezodalMethod(double[] boundaries,int numberOfInterval);
-        double SimpsonMethod(double[] boundaries, int numberOfInterval);
+        double TrapezodalMethod(int numberOfInterval);
+        double SimpsonMethod(int numberOfInterval);
     }
 }

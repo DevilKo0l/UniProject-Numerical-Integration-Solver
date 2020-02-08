@@ -47,8 +47,11 @@
     <Compile Include="Interfaces\IIntegrationMethod.cs" />
     <Compile Include="IntegralsOfPolynomials.cs" />
     <Compile Include="Interfaces\IPolynomial.cs" />
+    <Compile Include="InvalidInputException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RPN Calculator\RPNCalculator.cs" />
+    <Compile Include="RPN Calculator\Stack.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
