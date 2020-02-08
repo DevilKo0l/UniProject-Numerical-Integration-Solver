@@ -43,16 +43,22 @@ namespace Numerical_Integration_Solver
             polyFunction += $" - {Math.Abs(constPoly)}";
             Console.WriteLine(polyFunction);
         }
-        private double GetFunctionValue(double n)
+        private double GetFunctionValue(double x)
         {
             int exponent = polynomialCoefficients.Count - 1;
             double result = 0;
             for (int i = 0; i < sizeFunc; i++)
             {
-                result += polynomialCoefficients[i] * Math.Pow(n, exponent);
+                result += polynomialCoefficients[i] * Math.Pow(x, exponent);
                 exponent--;
             }
             return result;
+        }
+
+        private double GetFunctionValue(string infixFunction,double x)
+        {
+            string postfixFunction = RPNCalculator.InfixToPostfix(infixFunction);
+            return RPNCalculator.PostfixCalculator(postfixFunction, x);
         }
         public double SimpsonMethod(int numberOfInterval)
         {
@@ -77,6 +83,31 @@ namespace Numerical_Integration_Solver
                 I += 2*GetFunctionValue(_boundaries[0] + i * h);
             }
             return (h*I)/2;
+        }
+
+        public double SimpsonMethod(string infixFunction,int numberOfInterval)
+        {
+            double h = (_boundaries[1] - _boundaries[0]) / numberOfInterval;
+            double I = GetFunctionValue(infixFunction,_boundaries[0]) + GetFunctionValue(infixFunction,_boundaries[1]);
+            for (int i = 1; i < numberOfInterval; i++)
+            {
+                int coefficient = (i % 2 == 0) ? 2 : 4;
+                I += coefficient * GetFunctionValue(infixFunction,_boundaries[0] + i * h);
+            }
+            return (h * I) / 3;
+
+        }
+
+        public double TrapezodalMethod(string infixFunction,int numberOfInterval)
+        {
+            double h = (_boundaries[1] - _boundaries[0]) / numberOfInterval;
+            double I = GetFunctionValue(infixFunction,_boundaries[0]) + GetFunctionValue(infixFunction,_boundaries[1]);
+
+            for (int i = 1; i < numberOfInterval - 1; i++)
+            {
+                I += 2 * GetFunctionValue(infixFunction,_boundaries[0] + i * h);
+            }
+            return (h * I) / 2;
         }
     }
 }

@@ -46,6 +46,21 @@ namespace Numerical_Integration_Solver
                         Console.WriteLine(form.TrapezodalMethod(1000));
                         Console.WriteLine(form.SimpsonMethod(1000));
                         break;
+                    case 2:
+                        Console.Clear();
+                        Console.WriteLine("Please write the function:");
+                        string infixFunction = Console.ReadLine();
+                        Console.WriteLine("\nPlease write the boudaries of integration:");
+                        Console.Write("a = ");
+                        a = double.Parse(Console.ReadLine());
+                        Console.Write("b = ");
+                        b = double.Parse(Console.ReadLine());
+                        boundaries = new double[2] { a, b };
+                        IntegralsOfPolynomials form2 = new IntegralsOfPolynomials(boundaries);
+                        Console.WriteLine(form2.SimpsonMethod(infixFunction, 1000));
+                        Console.WriteLine(form2.TrapezodalMethod(infixFunction, 1000));
+
+                        break;
                     default:
                         break;
                 }
