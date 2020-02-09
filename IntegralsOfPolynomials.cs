@@ -57,8 +57,8 @@ namespace Numerical_Integration_Solver
 
         private double GetFunctionValue(string infixFunction,double x)
         {
-            string postfixFunction = RPNCalculator.InfixToPostfix(infixFunction);
-            return RPNCalculator.PostfixCalculator(postfixFunction, x);
+            string postfixFunction = RPNCalculator.InfixToPostfix(infixFunction, x);
+            return RPNCalculator.PostfixCalculator(postfixFunction);
         }
         public double SimpsonMethod(int numberOfInterval)
         {

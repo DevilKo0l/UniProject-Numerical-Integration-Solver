@@ -15,7 +15,7 @@ namespace Numerical_Integration_Solver
             max = size;
         }
 
-        public void push(T item)
+        public void Push(T item)
         {
             if (numElement == max - 1)
             {
@@ -28,13 +28,13 @@ namespace Numerical_Integration_Solver
             }
         }
 
-        public T pop()
+        public T Pop()
         {
             numElement--;
             return elements[numElement];
         }
 
-        public bool isEmpty()
+        public bool IsEmpty()
         {
             return numElement == 0;
         }

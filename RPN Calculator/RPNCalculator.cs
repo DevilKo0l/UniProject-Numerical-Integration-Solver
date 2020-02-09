@@ -47,79 +47,18 @@ namespace Numerical_Integration_Solver
             }
         }
 
-        public static double PostfixCalculator(string oprationInput, double x)
-        {
-            Stack<double> numStack = new Stack<double>(10);
-            double num;
-            foreach (var item in oprationInput.Split(' '))
-            {
-                if (double.TryParse(item, out num))
-                {
-                    numStack.push(num);
-                }
-                else if (item.ToLower() == "x")
-                {
-                    numStack.push(x);
-                }
-                else
-                {
-                    //2-3*(7+5) ->2 3 7 5 - * +
-                    //according to the func below: (5-7)*3+2
-                    double num1 = numStack.pop();
-                    double num2 = numStack.pop();
-                    double result = Calculate(num1, num2, item);
-                    numStack.push(result);
-                }
-            }
-            return numStack.pop();
-        }
-
-        private static int Precedence(string opInput)
-        {
-            if (opInput == "^")
-            {
-                return 4;
-            }
-            else if (opInput == "*" || opInput == "/")
-            {
-                return 3;
-            }
-            else if (opInput == "+" || opInput == "-")
-            {
-                return 2;
-            }
-            else
-            {
-                return -1;
-            }
-        }
-
-        private static string Associativity(string opInput)
-        {
-            if (opInput == "^")
-            {
-                return "Right";
-            }
-            else
-            {
-                return "Left";
-            }
-        }
-
-        public static string InfixToPostfix(string operation)
+        public static string InfixToPostfix(string operation, double x)
         {
             string postfixOutput = "";
-            Stack<string> operatorStack = new Stack<string>(10);
-            double num;
+            Stack<string> Operators = new Stack<string>(10);
             foreach (var item in operation.Split(' '))
             {
-                if (double.TryParse(item, out num))
+                if (double.TryParse(item, out double op))
                 {
                     if (postfixOutput == "")
                     {
                         postfixOutput = item;
                     }
-
                     else
                     {
                         postfixOutput += item + " ";
@@ -127,67 +66,117 @@ namespace Numerical_Integration_Solver
                 }
                 else if (item.ToLower() == "x")
                 {
-                    postfixOutput +="x" + " ";
+                    postfixOutput += x + " ";
                 }
                 else if (item == "(")
                 {
-                    operatorStack.push(item);
+                    Operators.Push(item);
                 }
                 else if (item == ")")
                 {
-                    while (!operatorStack.isEmpty() && operatorStack.Peek() != "(")
+                    while (Operators.Peek() != "(")
                     {
-                        postfixOutput += operatorStack.pop() + " " ;
+                        postfixOutput += Operators.Pop() + " ";
                     }
-                    operatorStack.pop();
+                    //This is to remove opening bracket from the stack
+                    Operators.Pop();
                 }
                 else
                 {
-                    while (!operatorStack.isEmpty() && operatorStack.Peek() != "("
-                            && (Precedence(operatorStack.Peek()) > Precedence(item)
-                            || Precedence(operatorStack.Peek()) == Precedence(item)
-                            && Associativity(item) == "left"))
+                    while (!Operators.IsEmpty()
+                        && (Precedence(Operators.Peek()) > Precedence(item)
+                        || Precedence(Operators.Peek()) == Precedence(item)
+                        && Associativity(item) == "left"))
                     {
-                        postfixOutput += operatorStack.pop() + " ";
+                        postfixOutput += Operators.Pop() + " ";
                     }
-                    operatorStack.push(item);
+
+                    Operators.Push(item);
                 }
             }
-            while (!operatorStack.isEmpty())
+            while (!Operators.IsEmpty())
             {
-                postfixOutput += operatorStack.pop() + " ";
+                postfixOutput += Operators.Pop() + " ";
             }
-            postfixOutput += postfixOutput.Trim(' ');
+            postfixOutput = postfixOutput.TrimEnd(' ');
             return postfixOutput;
         }
 
-        //good
-        private static double Calculate(double num1, double num2, string operatorInput)
+        public static double PostfixCalculator(string operationInput)
         {
-            if (operatorInput == "+")
+            Stack<double> numStack = new Stack<double>(10);
+            foreach (var item in operationInput.Split(' '))
             {
-                return num1 + num2;
+                if (double.TryParse(item, out double operand))
+                {
+                    numStack.Push(operand);
+                }
+                else
+                {
+                    double op2 = numStack.Pop();
+                    double op1 = numStack.Pop();
+                    double output = Calculate(op1, op2, item);
+                    numStack.Push(output);
+                }
             }
-            else if (operatorInput == "-")
+            return numStack.Pop();
+        }
+
+        public static double Calculate(double op1, double op2, string oper)
+        {
+            if (oper == "+")
             {
-                return num1 - num2;
+                return op1 + op2;
             }
-            else if (operatorInput == "*")
+            else if (oper == "-")
             {
-                return num1 * num2;
+                return op1 - op2;
             }
-            else if (operatorInput == "/")
+            else if (oper == "*")
             {
-                return num1 / num2;
+                return op1 * op2;
             }
-            else if (operatorInput == "^")
+            else if (oper == "/")
             {
-                return Math.Pow(num1, num2);
+                return op1 / op2;
+            }
+            else if (oper == "^")
+            {
+                return Math.Pow(op1, op2);
             }
             else
             {
                 return 0;
             }
+        }
+
+        public static string Associativity(string op)
+        {
+            if (op == "^")
+            {
+                return "right";
+            }
+            else
+            {
+                return "left";
+            }
+        }
+
+        public static int Precedence(string op)
+        {
+            if (op == "^")
+            {
+                return 4;
+            }
+            else if (op == "/" || op == "*")
+            {
+                return 3;
+            }
+            else if (op == "+" || op == "-")
+            {
+                return 2;
+            }
+            return -1;
         }
     }
 }
